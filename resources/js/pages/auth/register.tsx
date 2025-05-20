@@ -9,19 +9,32 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
 
-type RegisterForm = {
+type City = {
+    id: number;
     name: string;
+};
+
+type RegisterForm = {
+    first_name: string;
+    last_name: string;
     email: string;
     password: string;
     password_confirmation: string;
+    city_id: string;
 };
 
-export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm<Required<RegisterForm>>({
-        name: '',
+type Props = {
+    cities: City[];
+};
+
+export default function Register({ cities }: Props) {
+    const { data, setData, post, processing, errors, reset } = useForm<RegisterForm>({
+        first_name: '',
+        last_name: '',
         email: '',
         password: '',
         password_confirmation: '',
+        city_id: '',
     });
 
     const submit: FormEventHandler = (e) => {
@@ -45,14 +58,28 @@ export default function Register() {
                             autoFocus
                             tabIndex={1}
                             autoComplete="name"
-                            value={data.name}
-                            onChange={(e) => setData('name', e.target.value)}
+                            value={data.first_name}
+                            onChange={(e) => setData('first_name', e.target.value)}
                             disabled={processing}
                             placeholder="Full name"
                         />
-                        <InputError message={errors.name} className="mt-2" />
+                        <InputError message={errors.first_name} className="mt-2" />
                     </div>
-
+                    <div className="grid gap-2">
+                        <Label htmlFor="last_name">Last name</Label>
+                        <Input
+                            id="last_name"
+                            type="text"
+                            required
+                            tabIndex={1}
+                            autoComplete="name"
+                            value={data.last_name}
+                            onChange={(e) => setData('last_name', e.target.value)}
+                            disabled={processing}
+                            placeholder="Last name"
+                        />
+                        <InputError message={errors.last_name} />
+                    </div>
                     <div className="grid gap-2">
                         <Label htmlFor="email">Email address</Label>
                         <Input
@@ -99,6 +126,30 @@ export default function Register() {
                             placeholder="Confirm password"
                         />
                         <InputError message={errors.password_confirmation} />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="city_id">City</Label>
+                        <select
+                            id="city_id"
+                            name="city_id"
+                            required
+                            title="City"
+                            value={data.city_id}
+                            onChange={(e) => setData('city_id', e.target.value)}
+                            disabled={processing}
+                            className="border-input focus-visible:ring-ring placeholder:text-muted-foreground rounded-md border bg-transparent px-3 py-2 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                            <option value="" disabled>
+                                Select a city
+                            </option>
+                            {cities.map((city) => (
+                                <option key={city.id} value={city.id}>
+                                    {city.name}
+                                </option>
+                            ))}
+                        </select>
+                        <InputError message={errors.city_id} />
                     </div>
 
                     <Button type="submit" className="mt-2 w-full" tabIndex={5} disabled={processing}>
