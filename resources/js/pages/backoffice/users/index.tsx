@@ -8,7 +8,7 @@ import TextTableColumn from '@/components/ui/text-table-column';
 import TablePagination from '@/components/ui/table-pagination';
 import MetricCard from '@/components/ui/metric-card';
 import Toast from '@/components/ui/toast';
-import Modal from '@/components/ui/Modal'; 
+import Modal from '@/components/ui/modal'; 
 import { Head } from '@inertiajs/react';
 import { User as UserIcon, Users as UsersIcon } from 'lucide-react';
 
