@@ -36,7 +36,7 @@ type City = {
     updatedAt: string;
 };
 export default function Dashboard() {
-    const { metrics, cities } = usePage<PageProps<{ metrics: Metrics; cities: City }>>().props;
+    const { metrics, cities } = usePage<{ metrics: Metrics; cities: { data: City[]; meta: any } }>().props;
 
     const { data, setData, get, errors } = useForm<Required<SearchForm>>({
         keyword: '',

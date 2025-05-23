@@ -42,3 +42,5 @@ export interface User {
     updatedAt: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export type PageProps<T = any> = T;
