@@ -12,16 +12,18 @@ class CityResource extends JsonResource
      *
      * @return array<string, mixed>
      */
+    public static $wrap = null;
     public function toArray(Request $request): array
     {
+
+
         return [
-            'id'        => $this->id,
-            'name'      => $this->name,
-            'userCount' => $this->whenLoaded('users', function () {
-                return $this->users->count();
-            }),
-            'createdAt' => $this->created_at,
-            'updatedAt' => $this->updated_at,
+            'id'          => $this->id,
+            'name'        => $this->name,
+            'userCount'   => $this->users_count ?? 0,  // Use users_count from withCount
+            'tourCount'   => $this->tours_count ?? 0,  // Use tours_count from withCount
+            'createdAt'   => $this->created_at,
+            'updatedAt'   => $this->updated_at,
         ];
     }
 }

@@ -12,7 +12,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('backoffice/dashboard');
     })->name('dashboard');
-    Route::get('/cities', [CitiesContoller::class, 'index'])->name('cities.index');
+
+    Route::resource('cities', CitiesContoller::class);
 });
 
 require __DIR__.'/settings.php';
