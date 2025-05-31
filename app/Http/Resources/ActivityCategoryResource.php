@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CityResource extends JsonResource
+class ActivityCategoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,9 +17,6 @@ class CityResource extends JsonResource
         return [
             'id'        => $this->id,
             'name'      => $this->name,
-            'userCount' => $this->whenLoaded('users', function () {
-                return $this->users->count();
-            }),
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
 

@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CityResource extends JsonResource
+class RoleResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,9 +17,7 @@ class CityResource extends JsonResource
         return [
             'id'        => $this->id,
             'name'      => $this->name,
-            'userCount' => $this->whenLoaded('users', function () {
-                return $this->users->count();
-            }),
+            'guardname' => $this->guard_name,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
 

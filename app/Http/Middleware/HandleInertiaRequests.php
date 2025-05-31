@@ -48,6 +48,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user() ? (new UserResource($request->user()))->toArray($request) : null,
 
             ],
+
             'ziggy' => fn (): array => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
