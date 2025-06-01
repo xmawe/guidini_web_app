@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             CitySeeder::class,
+            GuideSeeder::class,
         ]);
 
         // User::factory()->create([

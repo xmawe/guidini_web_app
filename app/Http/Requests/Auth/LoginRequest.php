@@ -41,8 +41,14 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        if (!Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
+
+            if ($this->wantsJson()) {
+                throw ValidationException::withMessages([
+                    'email' => __('auth.failed'),
+                ])->status(401);
+            }
 
             throw ValidationException::withMessages([
                 'email' => __('auth.failed'),
@@ -59,13 +65,22 @@ class LoginRequest extends FormRequest
      */
     public function ensureIsNotRateLimited(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 
         event(new Lockout($this));
 
         $seconds = RateLimiter::availableIn($this->throttleKey());
+
+        if ($this->wantsJson()) {
+            throw ValidationException::withMessages([
+                'email' => [__('auth.throttle', [
+                    'seconds' => $seconds,
+                    'minutes' => ceil($seconds / 60),
+                ])],
+            ])->status(429);
+        }
 
         throw ValidationException::withMessages([
             'email' => __('auth.throttle', [

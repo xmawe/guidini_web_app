@@ -1,0 +1,31 @@
+# Test Chat API Endpoints (No Auth Required)
+
+### Get all chat rooms (for a quick overview)
+GET http://localhost:8000/api/test/chat/rooms/all
+Accept: application/json
+
+### Get chat rooms for a specific user
+GET http://localhost:8000/api/test/chat/rooms?user_id=1
+Accept: application/json
+
+### Get messages for a specific chat room
+GET http://localhost:8000/api/test/chat/rooms/1/messages?user_id=1
+Accept: application/json
+
+### Send a message in a chat room
+POST http://localhost:8000/api/test/chat/rooms/1/messages
+Content-Type: application/json
+Accept: application/json
+
+{
+    "user_id": 1,
+    "content": "This is a test message"
+}
+
+### Get messages with pagination
+GET http://localhost:8000/api/test/chat/rooms/1/messages?user_id=1&limit=10
+Accept: application/json
+
+### Get messages before a specific message ID
+GET http://localhost:8000/api/test/chat/rooms/1/messages?user_id=1&limit=10&before_id=20
+Accept: application/json
