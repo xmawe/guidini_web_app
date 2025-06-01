@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CitySeeder::class,
             RoleSeeder::class,
+            TourSeeder::class,
+            ActivityCategorySeeder::class,
         ]);
 
         // User::factory()->create([

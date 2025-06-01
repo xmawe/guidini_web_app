@@ -9,7 +9,7 @@ import TextInput from '@/components/ui/text-input';
 import TextTableColumn from '@/components/ui/text-table-column';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import type { PageProps } from '@inertiajs/inertia';
+import type { PageProps } from '@/types';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { Edit, MapPinned, Trash } from 'lucide-react';
 import { FormEventHandler } from 'react';
