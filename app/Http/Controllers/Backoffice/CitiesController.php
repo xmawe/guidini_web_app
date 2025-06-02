@@ -7,7 +7,7 @@ use App\Http\Resources\CityResource;
 use App\Models\City;
 use Illuminate\Http\Request;
 
-class CitiesContoller extends Controller
+class CitiesController extends Controller
 {
     public function index(Request $request)
     {

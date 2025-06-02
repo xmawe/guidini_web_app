@@ -11,13 +11,29 @@ class City extends Model
 
     protected $fillable = [
         'name',
+        'country',
+        'state',
     ];
 
-    // Relationships
+    /**
+     * Get all locations for this city
+     */
+    public function locations()
+    {
+        return $this->hasMany(Location::class);
+    }
+
+    /**
+     * Get all users from this city
+     */
     public function users()
     {
         return $this->hasMany(User::class);
     }
+
+    /**
+     * Get all tours in this city
+     */
     public function tours()
     {
         return $this->hasMany(Tour::class);
