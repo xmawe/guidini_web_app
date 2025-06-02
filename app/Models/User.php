@@ -30,6 +30,7 @@ class User extends Authenticatable
         'phone_number',
         'city_id',
         'last_activity_at',
+        'profile_picture',
     ];
 
     /**

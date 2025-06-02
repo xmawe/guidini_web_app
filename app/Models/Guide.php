@@ -14,6 +14,8 @@ class Guide extends Model
         'is_verified',
         'rating',
         'biography',
+        'image_url',          
+        'years_of_experience',
     ];
 
     protected $casts = [

@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\PasswordResetController;
 use App\Http\Controllers\Api\CitiesContoller;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\GuideController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Guide\TourController;
 
@@ -27,6 +28,12 @@ Route::group(['middleware' => ['auth']], function () {
 
 Route::group(['middleware' => ['auth:sanctum', 'role:guide']], function () {
     Route::get('/users', [UserController::class, 'index']);
+});
+
+Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'guide'], function () {
+    Route::post('/register', [GuideController::class, 'register']);
+    Route::get('/profile', [GuideController::class, 'profile'])->middleware('role:guide');
+    Route::put('/profile', [GuideController::class, 'update'])->middleware('role:guide');
 });
 
 
