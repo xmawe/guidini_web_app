@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Guide\TourController;
 use App\Http\Controllers\Api\GuideController;
 use App\Http\Controllers\Api\BookingController;
+use App\Http\Controllers\Api\GuideBookingsController;
 use App\Http\Controllers\Api\MyBookingsController;
 
 Route::get('/cities', [CitiesContoller::class, 'index']);
@@ -62,4 +63,9 @@ Route::group(['middleware' => ['auth:sanctum', 'role:guide'], 'prefix'=>'guide']
     Route::get('/tours', [TourController::class, 'myTours']);
     Route::get('/tours/create', [TourController::class, 'create']);
     Route::post('/tours', [TourController::class, 'store']);
+    //Booking management for guides
+    Route::get('/bookings', [GuideBookingsController::class, 'index']);
+    Route::get('/bookings/stats', [GuideBookingsController::class, 'getStatistics']);
+    Route::post('/bookings/{booking}/accept', [GuideBookingsController::class, 'acceptBooking']);
+    Route::post('/bookings/{booking}/decline', [GuideBookingsController::class, 'declineBooking']);
 });

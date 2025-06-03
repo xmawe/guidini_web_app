@@ -53,13 +53,13 @@ class TourController extends Controller
                 $query->whereHas('city', function ($q) use ($locationName) {
                     $q->where('name', $locationName);
                 });
-                $tours = $query->limit(10)->get();
+                $tours = $query->get();
             } else {
                 // Show random tours if no location selected
                 $tours = $query->inRandomOrder()->limit(10)->get();
             }
         } else {
-            $tours = $query->limit(10)->get();
+            $tours = $query->get();
         }
 
         return TourResource::collection($tours);
