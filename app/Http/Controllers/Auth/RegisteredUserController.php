@@ -61,6 +61,7 @@ class RegisteredUserController extends Controller
                 'phone_number' => $request->phoneNumber,
                 'city_id' => $request->cityId,
                 'password' => Hash::make($request->password),
+                'last_activity_at' => now(),
             ]);
 
             event(new Registered($user));
@@ -82,6 +83,8 @@ class RegisteredUserController extends Controller
                         'profile_picture' => $user->profile_picture,
                         'city_id' => $user->city_id,
                         'is_guide' => $user->is_guide,
+                        'is_online' => true,
+                        'last_activity_at' => $user->last_activity_at,
                     ]
                 ]
             ], 201);
@@ -101,6 +104,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'city_id' => $request->city_id,
             'password' => Hash::make($request->password),
+            'last_activity_at' => now(),
         ]);
 
         event(new Registered($user));

@@ -17,6 +17,11 @@ class AuthController extends Controller
         $request->authenticate();
 
         $user = $request->user();
+
+        // Update last activity timestamp to mark user as online
+        $user->last_activity_at = now();
+        $user->save();
+
         $token = $user->createToken('mobile-app')->plainTextToken;
 
         return response()->json([
@@ -32,6 +37,8 @@ class AuthController extends Controller
                     'profile_picture' => $user->profile_picture,
                     'city_id' => $user->city_id,
                     'is_guide' => $user->is_guide,
+                    'is_online' => true,
+                    'last_activity_at' => $user->last_activity_at,
                 ]
             ]
         ]);

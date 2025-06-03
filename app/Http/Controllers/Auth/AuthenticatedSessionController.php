@@ -34,6 +34,11 @@ class AuthenticatedSessionController extends Controller
 
         if ($request->wantsJson()) {
             $user = $request->user();
+
+            // Update last activity timestamp to mark user as online
+            $user->last_activity_at = now();
+            $user->save();
+
             $token = $user->createToken('mobile-app')->plainTextToken;
 
             return response()->json([
@@ -49,12 +54,18 @@ class AuthenticatedSessionController extends Controller
                         'profile_picture' => $user->profile_picture,
                         'city_id' => $user->city_id,
                         'is_guide' => $user->is_guide,
+                        'is_online' => true,
+                        'last_activity_at' => $user->last_activity_at,
                     ]
                 ]
             ]);
         }
 
         $request->session()->regenerate();
+
+        // Update last activity timestamp for web login as well
+        $request->user()->update(['last_activity_at' => now()]);
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
@@ -87,6 +98,13 @@ class AuthenticatedSessionController extends Controller
     {
         $user = $request->user();
 
+        // Update last activity timestamp to refresh online status
+        $user->last_activity_at = now();
+        $user->save();
+
+        // Check if user is online (active in the last 5 minutes)
+        $isOnline = $user->last_activity_at >= now()->subMinutes(5);
+
         return response()->json([
             'success' => true,
             'data' => [
@@ -99,6 +117,8 @@ class AuthenticatedSessionController extends Controller
                     'profile_picture' => $user->profile_picture,
                     'city_id' => $user->city_id,
                     'is_guide' => $user->is_guide,
+                    'is_online' => $isOnline,
+                    'last_activity_at' => $user->last_activity_at,
                 ]
             ]
         ]);
