@@ -23,9 +23,9 @@ class GuideResource extends JsonResource
             'biography' => $this->biography,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
-
             // Optionally include related user
             'user' => new UserResource($this->whenLoaded('user')),
+            'tours' => TourResource::collection($this->whenLoaded('tours')),
         ];
     }
 }

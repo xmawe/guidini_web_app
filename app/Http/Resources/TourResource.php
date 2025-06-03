@@ -18,6 +18,7 @@ class TourResource extends JsonResource
             'locationId' => $this->location_id,
             'cityId' => $this->city_id,
             'bookingCount'  => $this->bookingCount(),
+            'activityCount'  => $this->activityCount(),
             'title' => $this->title,
             'description' => $this->description,
             'price' => $this->price,
@@ -28,10 +29,13 @@ class TourResource extends JsonResource
             'isFoodIncluded' => $this->is_food_included,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
+            'rating'=> $this->getAverageRatingAttribute(),
+
 
             'guide' => new GuideResource($this->whenLoaded('guide')),
             'location' => new LocationResource($this->whenLoaded('location')),
             'city' => new CityResource($this->whenLoaded('city')),
+            'reviews' => ReviewResource::collection($this->whenLoaded('reviews')?? []),
             'activities' => ActivityResource::collection($this->whenLoaded('activities')),
             'tourDates' => TourDateResource::collection($this->whenLoaded('tourDates')),
             'tourImages' => TourImageResource::collection($this->whenLoaded('tourImages')),

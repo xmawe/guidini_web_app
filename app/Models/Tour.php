@@ -1,13 +1,15 @@
 <?php
 
+// App/Models/Tour.php
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Tour extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'guide_id',
         'location_id',
@@ -19,34 +21,68 @@ class Tour extends Model
         'max_group_size',
         'availability_status',
         'is_transport_included',
-        'is_food_included',
-        // 'is_accommodation_included',
+        'is_food_included'
     ];
 
-    /**
-     * Get the guide for the tour.
-     */
-    public function guide(): BelongsTo
+    protected $casts = [
+        'price' => 'decimal:2',
+        'is_transport_included' => 'boolean',
+        'is_food_included' => 'boolean'
+    ];
+
+    public function guide()
     {
         return $this->belongsTo(Guide::class);
     }
 
-    /**
-     * Get the location for the tour.
-     */
-    public function location(): BelongsTo
+    public function location()
     {
         return $this->belongsTo(Location::class);
     }
 
-    public function activities(): HasMany
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function activities()
     {
         return $this->hasMany(Activity::class);
     }
 
-    public function bookings(): HasMany
+    public function tourDates()
+    {
+        return $this->hasMany(TourDate::class);
+    }
+
+        public function tourImages()
+    {
+        return $this->hasMany(TourImage::class);
+    }
+
+    public function bookings()
     {
         return $this->hasMany(Booking::class);
+    }
+
+        public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function scopeAvailable($query)
+    {
+        return $query->where('availability_status', 'available');
+    }
+
+    public function getFormattedPriceAttribute()
+    {
+        return number_format($this->price, 2);
+    }
+
+    public function activityCount()
+    {
+        return $this->activities()->count();
     }
 
     public function bookingCount()
@@ -54,21 +90,22 @@ class Tour extends Model
         return $this->bookings()->count();
     }
 
-    public function tourImages(): HasMany
+    public function getAverageRatingAttribute(): float
     {
-        return $this->hasMany(TourImage::class);
+        return round($this->reviews()->avg('rating') ?? 0, 2);
     }
 
-    public function tourDates(): HasMany
+    public function getFormattedDurationAttribute()
     {
-        return $this->hasMany(TourDate::class);
-    }
+        $hours = intval($this->duration / 60);
+        $minutes = $this->duration % 60;
 
-    /**
-     * Get the city for the tour.
-     */
-    public function city(): BelongsTo
-    {
-        return $this->belongsTo(City::class);
+        if ($hours > 0 && $minutes > 0) {
+            return "{$hours}h {$minutes}m";
+        } elseif ($hours > 0) {
+            return "{$hours}h";
+        } else {
+            return "{$minutes}m";
+        }
     }
 }

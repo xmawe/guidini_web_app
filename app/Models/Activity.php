@@ -25,7 +25,6 @@ class Activity extends Model
     ];
 
     // Relationships
-
     public function tour()
     {
         return $this->belongsTo(Tour::class);

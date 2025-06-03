@@ -1,12 +1,15 @@
 <?php
 
+// App/Models/Booking.php
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Booking extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'user_id',
         'tour_id',
@@ -14,31 +17,48 @@ class Booking extends Model
         'booked_date',
         'group_size',
         'total_price',
-        'status',
-        // 'specialRequests',
+        'status'
     ];
 
-    /**
-     * Get the user who made the booking.
-     */
-    public function user(): BelongsTo
+    protected $casts = [
+        'booked_date' => 'date',
+        'total_price' => 'decimal:2',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
+    ];
+
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Get the tour of the booking.
-     */
-    public function tour(): BelongsTo
+    public function tour()
     {
         return $this->belongsTo(Tour::class);
     }
 
-    /**
-     * Get the tour date of the booking.
-     */
-    public function tourDate(): BelongsTo
+    public function tourDate()
     {
         return $this->belongsTo(TourDate::class);
+    }
+
+    public function getBookingReferenceAttribute()
+    {
+        return 'BK-' . str_pad($this->id, 6, '0', STR_PAD_LEFT);
+    }
+
+    public function scopePending($query)
+    {
+        return $query->where('status', 'pending');
+    }
+
+    public function scopeConfirmed($query)
+    {
+        return $query->where('status', 'confirmed');
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->whereIn('status', ['pending', 'confirmed']);
     }
 }
